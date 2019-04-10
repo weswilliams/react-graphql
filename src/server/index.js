@@ -3,9 +3,22 @@ import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import compress from 'compression';
+import services from './services';
 
 const app = express();
 const root = path.join(__dirname, '../../');
+
+//bind graphql to express
+const serviceNames = Object.keys(services);
+
+for (let i = 0; i < serviceNames.length; i += 1) {
+  const name = serviceNames[i];
+  if (name === 'graphql') {
+    services[name].applyMiddleware({ app });
+  } else {
+    app.use(`/${name}`, services[name]);
+  }
+}
 
 // routing
 app.use('/', express.static(path.join(root, 'dist/client')));
