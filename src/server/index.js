@@ -1,16 +1,22 @@
+import logger from './helpers/logger';
 import express from 'express';
 import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import compress from 'compression';
-import services from './services';
+import servicesLoader from './services';
 import db from './database';
 
+const utils = {
+  db,
+};
+const services = servicesLoader(utils);
 const app = express();
 const root = path.join(__dirname, '../../');
 
 //bind graphql to express
 const serviceNames = Object.keys(services);
+logger.log({ level: 'info', message: 'load services: ' + serviceNames });
 
 for (let i = 0; i < serviceNames.length; i += 1) {
   const name = serviceNames[i];

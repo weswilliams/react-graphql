@@ -5,25 +5,32 @@ let posts = [
   {  id: 1,  text: 'Lorem ipsum2',  user: {    avatar: '/uploads/avatar2.png',    username: 'Test User 2'  }}
 ];
 
-const resolvers = {
-  RootQuery: {
-    posts(root, args, context) {
-      return posts;
-    },
-  },
 
-  RootMutation: {
-    addPost(root, { post, user }, context) {
-      const postObject = {
-        ...post,
-        user,
-        id: posts.length + 1,
-      };
-      posts.push(postObject);
-      logger.log({ level: 'info', message: 'Post was created' });
-      return postObject;
+export default function resolver() {
+  logger.log({ level: 'info', message: 'create resolver' });
+  const { db } = this;
+  const { Post } = db.models;
+  const resolvers = {
+    RootQuery: {
+      posts(root, args, context) {
+        logger.log({ level: 'info', message: 'query posts' });
+        // return posts;
+        return Post.findAll({ order: [['createdAt', 'DESC']] });
+      },
     },
-  },
-};
 
-export default resolvers;
+    RootMutation: {
+      addPost(root, { post, user }, context) {
+        const postObject = {
+          ...post,
+          user,
+          id: posts.length + 1,
+        };
+        posts.push(postObject);
+        logger.log({ level: 'info', message: 'Post was created' });
+        return postObject;
+      },
+    },
+  };
+  return resolvers;
+}

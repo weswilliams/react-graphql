@@ -2,16 +2,19 @@ import { ApolloServer } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import Resolvers from './resolvers';
 import Schema from './schema';
+import logger from '../../helpers/logger';
 
-//graphql
-const executableSchema = makeExecutableSchema({
-  typeDefs: Schema,
-  resolvers: Resolvers
-});
+export default (utils) => {
+  const executableSchema = makeExecutableSchema({
+    typeDefs: Schema,
+    resolvers: Resolvers.call(utils),
+  });
 
-const server = new ApolloServer({
-  schema: executableSchema,
-  context: ({ req }) => req
-});
+  const server = new ApolloServer({
+    schema: executableSchema,
+    context: ({ req }) => req,
+    debug: true,
+  });
 
-export default server;
+  return server;
+};

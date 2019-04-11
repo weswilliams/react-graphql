@@ -6,7 +6,6 @@ module.exports = {
     "host": "localhost",
     "port": 8889,
     "dialect": "mysql",
-    "operatorsAliases": false,
     "pool": {
       "max": 5,
       "min": 0,
@@ -21,7 +20,6 @@ module.exports = {
     "database": process.env.database,
     "logging": false,
     "dialect": "mysql",
-    "operatorsAliases": false,
     "pool": {
       "max": 5,
       "min": 0,
