@@ -8,7 +8,6 @@ let posts = [
 const resolvers = {
   RootQuery: {
     posts(root, args, context) {
-      console.log("returning empty array");
       return posts;
     },
   },
